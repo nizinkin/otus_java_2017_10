@@ -16,17 +16,16 @@ public class EntryPoint {
     public static void main(String[] args){
         
         Random genDigit =new Random();
-        int[] searchArray = new int[20];
+        int[] searchArray = new int[10];
         for(int i = 0; i < searchArray.length; i++ ) 
-            searchArray[i]= genDigit.nextInt(30);
+            searchArray[i]= genDigit.nextInt(10);
         
-        int firtsDigit = 5;
-        int secondDigit = 108;
-        
+        int firtsDigit = 8;
+        int secondDigit = 1;
         BinarySearch obj = new BinarySearch();
-        
-        System.out.print("Array elements:" +Arrays.toString(searchArray));
+        System.out.println("Array elements:" +Arrays.toString(searchArray));
         System.out.println("It contain " + firtsDigit+"?: " + obj.isExist(searchArray, firtsDigit));
         System.out.println("It contain " + secondDigit+"?: " + obj.isExist(searchArray, secondDigit));
+        System.out.println("Sorted elements:" +Arrays.toString(searchArray));
     }
 }
