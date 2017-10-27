@@ -8,22 +8,27 @@
 
     <name>M1L1.1</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>23.2-jre</version>
-        </dependency>
-    </dependencies>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-    </properties>
-    
+   
     <build>
-       <finalName>${artifactId}</finalName>
+       <finalName>${project.artifactId}</finalName>
     <plugins>
+
+     <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+            </configuration>
+        </plugin>    
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-jar-plugin</artifactId>
@@ -38,10 +43,59 @@
         </archive>
       </configuration>
     </plugin>
+     <plugin>
+            <groupId>com.github.wvengen</groupId>
+            <artifactId>proguard-maven-plugin</artifactId>
+            <version>2.0.8</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>proguard</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <obfuscate>true</obfuscate>
+                <injar>${project.artifactId}-jar-with-dependencies.jar</injar>
+                <outjar>${project.artifactId}-after-obfuscation.jar</outjar>
+                <outputDirectory>${project.build.directory}</outputDirectory>
+                <proguardInclude>${basedir}/proguard.pro</proguardInclude>
+                            <options>
+                                <option>-allowaccessmodification</option>
+                                <option>-dontoptimize</option>
+                                <option>-dontshrink</option>
+                                <option>-dontnote</option>
+                                <option>-dontwarn</option> <!-- added option to ignore com.sun missing classes -->
+                                <option>-keepattributes Signature</option>
+                                 <option>-keep class ru.otus.java.EntryPoint { *; }</option>
+                            </options>
+                <libs>
+                    <lib>${java.home}/lib/rt.jar</lib>
+                </libs>
+                <addMavenDescriptor>false</addMavenDescriptor>
+                <includeDependency>false</includeDependency>
+                <proguardVersion>5.2.1</proguardVersion>
+            </configuration>
+            <dependencies>
+                <dependency>
+                    <groupId>net.sf.proguard</groupId>
+                    <artifactId>proguard-base</artifactId>
+                    <version>5.2.1</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </plugin>
   </plugins>
        
 </build>
-    
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.2-jre</version>
+        </dependency>
+    </dependencies>
 
         
     
